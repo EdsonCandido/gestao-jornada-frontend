@@ -1,5 +1,5 @@
 import { Button, Input } from "antd";
-import * as C from "./styles";
+import * as C from "./style";
 import { useState } from "react";
 
 import { userStore } from "../../store/usersStore";
@@ -31,10 +31,13 @@ const Login = () => {
     const result = await sessionService.login(login, password);
     if (result.status === 200) {
       setUser(result.data);
-
+      console.log(result.data)
       toast.success('Login efetuado com sucesso');
       setTimeout(() => {
-          navigate("/dashboard");
+        result.data.is_admin
+          ? navigate("/admin/dashboard")
+          :navigate("/dashboard");
+          
       }, 500)
     } else {
       toast.error(result.message);

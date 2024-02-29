@@ -9,7 +9,7 @@ const LazyDashboardPage = lazy(() => import("../pages/dashboard"));
 export const RoutesApp = () => {
   const user = userStore((store) => store.user);
 
-  function Auth({ children }: { children: JSX.Element }) {
+  function Auth({ children  }: { children: JSX.Element}) {
     if (!user) {
       return <Navigate to="/login" />;
     }
@@ -27,6 +27,17 @@ export const RoutesApp = () => {
         }
         key={Math.random()}
       ></Route>
+    { user?.is_admin === 1 &&  <Route
+        path="/admin/dashboard"
+        element={
+          <Auth>
+             <Suspense fallback={<Spinner />}>
+            <LazyDashboardPage />
+             </Suspense>
+          </Auth>
+        }
+        key={Math.random()}
+      ></Route>}
       <Route
         path="/dashboard"
         element={
@@ -38,6 +49,7 @@ export const RoutesApp = () => {
         }
         key={Math.random()}
       ></Route>
+       <Route path="*" element={<Navigate to="/login" />}/>
     </Routes>
   );
 };
