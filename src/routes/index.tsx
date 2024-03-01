@@ -2,6 +2,7 @@ import { Suspense, lazy } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { userStore } from "../store/usersStore";
 import { Spinner } from "../components/spinner";
+import AdminDashboardPage from "../pages/admin/Dashboard";
 
 const LazyLoginPage = lazy(() => import("../pages/login"));
 const LazyDashboardPage = lazy(() => import("../pages/dashboard"));
@@ -32,7 +33,7 @@ export const RoutesApp = () => {
         element={
           <Auth>
              <Suspense fallback={<Spinner />}>
-            <LazyDashboardPage />
+            <AdminDashboardPage />
              </Suspense>
           </Auth>
         }

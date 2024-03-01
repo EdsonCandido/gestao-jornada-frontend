@@ -4,14 +4,14 @@ import {
     UserOutlined,
     VideoCameraOutlined,LogoutOutlined
   } from '@ant-design/icons';
-import { Layout, Menu, Button, theme } from 'antd';
+import { Layout, Menu, Button, theme, Flex } from 'antd';
 import { userStore } from '../../store/usersStore';
 import { useNavigate } from 'react-router-dom';
+import ListUsers from '../../components/ListUsers';
+import { useState } from 'react';
+import ListJourneyPoints from '../../components/ListJourneyPoints';
 const { Header, Sider, Content, Footer } = Layout;
 
-type IProps = {
-    children?: JSX.Element
-}
 
 const arrModulos = [
     {
@@ -25,7 +25,9 @@ const arrModulos = [
         label: 'Ponto Eletrônico',
     },
 ];
-const Dashboard  = ({children} : IProps) => {
+const Dashboard  = ({}: any) => {
+
+  const [router, setRouter] = useState(1);
 
     const  {signOut, user, isOpenNav, setIsOpenNav} = userStore((state) => { return {signOut:state.signOut , isOpenNav: state.isOpenNav, setIsOpenNav: state.setIsOpenNav, user: state.user}});
 const navigate = useNavigate();
@@ -33,6 +35,10 @@ const navigate = useNavigate();
         signOut();
         navigate('/login');
     }
+
+    const handlerNavigate = (element: number) => {
+      setRouter(element)
+    } 
 
     const { token: { colorBgContainer, borderRadiusLG }, } = theme.useToken();
 
@@ -47,6 +53,7 @@ const navigate = useNavigate();
             mode="inline"
             defaultSelectedKeys={user?.is_admin === 1 ? ['1'] : ['2']}
             items={modulos}
+            onClick={(e) => handlerNavigate(Number(e.key))}
             style={{ borderRadius: borderRadiusLG}}
           />
         </Sider>
@@ -64,6 +71,8 @@ const navigate = useNavigate();
                 height: 64,
               }}
             />
+            <Flex align='center'>
+            <p>Olá <a>{user?.name}</a></p>
             <Button
               type="text"
               icon={<LogoutOutlined />}
@@ -72,16 +81,18 @@ const navigate = useNavigate();
                 fontSize: '16px',
                 width: 64,
                 height: 64,
-              }}
+            }}
             />
+            </Flex>
           </Header>
           <Content
             style={{
               margin: '24px 0px', padding: 24, minHeight: '40vh',
               background: colorBgContainer, borderRadius: borderRadiusLG,
               }}>
-            {/* Content */}
-            {children}
+            {
+router === 1 ? <ListUsers/>: <ListJourneyPoints />
+            }            
           </Content>
           <Footer style={{ background: colorBgContainer, 
             textAlign: 'center', borderRadius: borderRadiusLG, margin:0 }}>

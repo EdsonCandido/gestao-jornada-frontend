@@ -31,14 +31,8 @@ const Login = () => {
     const result = await sessionService.login(login, password);
     if (result.status === 200) {
       setUser(result.data);
-      console.log(result.data)
-      toast.success('Login efetuado com sucesso');
-      setTimeout(() => {
-        result.data.is_admin
-          ? navigate("/admin/dashboard")
-          :navigate("/dashboard");
-          
-      }, 500)
+      toast.success("Login efetuado com sucesso");
+      navigate("/dashboard");
     } else {
       toast.error(result.message);
     }
